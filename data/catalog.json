@@ -1,0 +1,340 @@
+{
+  "brand": "Tsuii's",
+  "owner": "Kaoru Mitsui",
+  "draft": true,
+  "taxRate": 0.1,
+  "rates": {
+    "silver": 310,
+    "gold": 21000
+  },
+  "market": {
+    "silver": 306,
+    "gold": 20832,
+    "silverExact": 306.34,
+    "goldExact": 20831.94,
+    "asOf": "2026-09-29",
+    "usdJpy": 156.88,
+    "fxDate": "2026-09-28",
+    "goldUsdOz": 4130.200195,
+    "silverUsdOz": 60.736,
+    "source": "Gold-API USD/troy oz × Frankfurter USDJPY. 円/gは四捨五入。",
+    "fetchedAt": null
+  },
+  "links": [
+    {
+      "label": "Instagram",
+      "href": "https://www.instagram.com/tsuii_s/"
+    },
+    {
+      "label": "ARCANA × PEGRU",
+      "href": "https://goodbase-arcana.co.jp/blogdetail?wgd=cases-27&wgdo=date-DESC,sort-ASC"
+    },
+    {
+      "label": "Instagram 投稿",
+      "href": "https://www.instagram.com/p/DLxCBecP9kQ/"
+    },
+    {
+      "label": "Forty Niners",
+      "href": "https://www.threads.com/@fortyniners_keepon75/post/DX76vFRD3bG/recommend-itemstyle-%E3%82%B4%E3%83%BC%E3%83%AB%E3%83%87%E3%83%B3%E3%82%A6%E3%82%A3%E3%83%BC%E3%82%AF%E3%82%82%E3%81%8A%E3%81%8A%E3%81%9A%E3%82%81-%E3%81%BE%E3%81%A0%E3%81%BE%E3%81%A0%E5%AF%92%E6%9A%96%E5%B7%AE%E3%81%82%E3%82%8B%E3%81%97%E3%82%AB%E3%83%90%E3%83%BC%E3%82%AA%E3%83%BC%E3%83%AB%E3%82%92%E7%BE%BD%E7%B9%94%E3%82%8A%E3%81%A8%E3%81%97%E3%81%A6%E3%82%AA%E3%82%B9%E3%82%B9%E3%83%A1%E3%81%9D%E3%81%97%E3%81%A6%E3%81%93%E3%81%AE%E3%82%B7%E3%83%BC%E3%82%BA%E3%83%B3%E3%81%AB%E3%81%AA%E3%82%8B%E3%81%A8%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B5%E3%83%AA/"
+    }
+  ],
+  "products": [
+    {
+      "id": "Q-RNG",
+      "name": "フェザーリング",
+      "category": "リング",
+      "metal": "mixed",
+      "quoted": true,
+      "priceYen": 60000,
+      "image": "images/feather-ring.jpg",
+      "note": "シルバーの羽根に、小さなゴールドの星。"
+    },
+    {
+      "id": "Q-NEC",
+      "name": "ネックレス",
+      "category": "ネックレス",
+      "metal": "mixed",
+      "quoted": true,
+      "note": "星形ビーズ シルバーは70cm分128個。星型ビーズ ゴールドは3個。",
+      "lines": [
+        {
+          "partId": "P01",
+          "qty": 128
+        },
+        {
+          "partId": "P23",
+          "qty": 3
+        },
+        {
+          "partId": "P02",
+          "qty": 1
+        },
+        {
+          "partId": "P03",
+          "qty": 2
+        },
+        {
+          "partId": "P04",
+          "qty": 1
+        },
+        {
+          "partId": "P05",
+          "qty": 1
+        },
+        {
+          "partId": "P06",
+          "qty": 1
+        },
+        {
+          "partId": "P07",
+          "qty": 2
+        },
+        {
+          "partId": "P08",
+          "qty": 1
+        },
+        {
+          "partId": "P09",
+          "qty": 1
+        },
+        {
+          "partId": "P10",
+          "qty": 1
+        },
+        {
+          "partId": "P11",
+          "qty": 1
+        },
+        {
+          "partId": "P12",
+          "qty": 1
+        },
+        {
+          "partId": "P13",
+          "qty": 4
+        },
+        {
+          "partId": "P14",
+          "qty": 1
+        },
+        {
+          "partId": "P15",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "id": "Q-BRC",
+      "name": "ブレス",
+      "category": "ブレス",
+      "metal": "mixed",
+      "quoted": true,
+      "note": "星ビーズ シルバー 29個。",
+      "lines": [
+        {
+          "partId": "P17",
+          "qty": 29
+        },
+        {
+          "partId": "P18",
+          "qty": 1
+        },
+        {
+          "partId": "P19",
+          "qty": 2
+        },
+        {
+          "partId": "P05",
+          "qty": 1
+        },
+        {
+          "partId": "P06",
+          "qty": 1
+        },
+        {
+          "partId": "P12",
+          "qty": 1
+        },
+        {
+          "partId": "P20",
+          "qty": 2
+        },
+        {
+          "partId": "P21",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "id": "Q-BAN",
+      "name": "バンダナ コンチョ",
+      "category": "バンダナ",
+      "metal": "mixed",
+      "quoted": true,
+      "note": "コンチョ1個。",
+      "lines": [
+        {
+          "partId": "P22",
+          "qty": 1
+        }
+      ]
+    }
+  ],
+  "quoteSource": "三井さんとの前回の会話。税の記載はないので、金額はそのまま。",
+  "library": [
+    {
+      "id": "P01",
+      "name": "星形ビーズ シルバー",
+      "group": "ビーズ",
+      "unitYen": 3800,
+      "note": "70cm分128個"
+    },
+    {
+      "id": "P23",
+      "name": "星型ビーズ ゴールド",
+      "group": "ビーズ",
+      "unitYen": 60000,
+      "note": ""
+    },
+    {
+      "id": "P02",
+      "name": "星形ビーズ K18グリーン",
+      "group": "ビーズ",
+      "unitYen": 60000,
+      "note": ""
+    },
+    {
+      "id": "P03",
+      "name": "丸ビーズXL",
+      "group": "ビーズ",
+      "unitYen": 3100,
+      "note": ""
+    },
+    {
+      "id": "P04",
+      "name": "革紐（ネックレス）",
+      "group": "紐",
+      "unitYen": 1500,
+      "note": ""
+    },
+    {
+      "id": "P05",
+      "name": "ホイール旧型星金",
+      "group": "金具",
+      "unitYen": 25000,
+      "note": ""
+    },
+    {
+      "id": "P06",
+      "name": "フェザーフック",
+      "group": "金具",
+      "unitYen": 15000,
+      "note": ""
+    },
+    {
+      "id": "P07",
+      "name": "アンティークビーズ血赤",
+      "group": "ビーズ",
+      "unitYen": 3000,
+      "note": ""
+    },
+    {
+      "id": "P08",
+      "name": "7層シェブロンビーズ",
+      "group": "ビーズ",
+      "unitYen": 50000,
+      "note": ""
+    },
+    {
+      "id": "P09",
+      "name": "K18ピンク先金フェザー",
+      "group": "金具",
+      "unitYen": 330000,
+      "note": ""
+    },
+    {
+      "id": "P10",
+      "name": "先端シルバー星付け",
+      "group": "金具",
+      "unitYen": 5000,
+      "note": ""
+    },
+    {
+      "id": "P11",
+      "name": "フェザー取付ホイール",
+      "group": "金具",
+      "unitYen": 15000,
+      "note": ""
+    },
+    {
+      "id": "P12",
+      "name": "シルバーメタル",
+      "group": "金具",
+      "unitYen": 5000,
+      "note": ""
+    },
+    {
+      "id": "P13",
+      "name": "丸ビーズS",
+      "group": "ビーズ",
+      "unitYen": 2300,
+      "note": ""
+    },
+    {
+      "id": "P14",
+      "name": "アンティーク赤丸ビーズ",
+      "group": "ビーズ",
+      "unitYen": 5000,
+      "note": ""
+    },
+    {
+      "id": "P15",
+      "name": "4層シェブロン",
+      "group": "ビーズ",
+      "unitYen": 1000,
+      "note": ""
+    },
+    {
+      "id": "P17",
+      "name": "星ビーズ シルバー",
+      "group": "ビーズ",
+      "unitYen": 3800,
+      "note": ""
+    },
+    {
+      "id": "P18",
+      "name": "星ビーズ K18ビーズ",
+      "group": "ビーズ",
+      "unitYen": 60000,
+      "note": ""
+    },
+    {
+      "id": "P19",
+      "name": "丸ビーズL",
+      "group": "ビーズ",
+      "unitYen": 2700,
+      "note": ""
+    },
+    {
+      "id": "P20",
+      "name": "アンティーク血赤ビーズ",
+      "group": "ビーズ",
+      "unitYen": 3000,
+      "note": ""
+    },
+    {
+      "id": "P21",
+      "name": "革紐（ブレス）",
+      "group": "紐",
+      "unitYen": 500,
+      "note": ""
+    },
+    {
+      "id": "P22",
+      "name": "コンチョ",
+      "group": "金具",
+      "unitYen": 8500,
+      "note": ""
+    }
+  ]
+}
