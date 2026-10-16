@@ -87,6 +87,12 @@ export function lineExTax(state, product, optionIds) {
   return baseExTax(state, product) + extras;
 }
 
+export function catalogUrl() {
+  const href = window.location.href;
+  const directory = href.endsWith("/") ? href : href.replace(/[^/]*$/, "");
+  return new URL("../data/catalog.json", directory).href;
+}
+
 export async function loadState() {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) {
@@ -96,7 +102,7 @@ export async function loadState() {
       localStorage.removeItem(STORAGE_KEY);
     }
   }
-  const response = await fetch("/data/catalog.json");
+  const response = await fetch(catalogUrl());
   if (!response.ok) throw new Error("catalog.json を読み込めませんでした");
   const seed = await response.json();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));

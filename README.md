@@ -7,7 +7,17 @@ The 見積 sheet, the menu, and the dashboard use the parts list from the previo
 税抜 = 重量(g) × 手入力レート(¥/g) + 工賃  
 税込 = 税抜 × (1 + 消費税率)
 
-## Open it
+## Shop address
+
+The menu stays online when this Mac is off:
+
+https://yosuke844-source.github.io/tsuiis/
+
+That page is public. Anyone with the link can see the quoted prices. Bookmark it on Mr. Mitsui’s iPad, then turn on Guided Access.
+
+A price changed in the dashboard stays on that iPad. It does not change the page other people open, and it does not change the Excel file. The daily metal-rate button still needs this Mac running `python3 serve.py`.
+
+## Open it on this Mac
 
 ```bash
 cd ~/Projects/tsuiis

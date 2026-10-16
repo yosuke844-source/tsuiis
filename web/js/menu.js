@@ -14,6 +14,26 @@ let mode = "sets";
 let category = "すべて";
 let openId = null;
 let slipOpen = false;
+let navOpen = false;
+
+const englishName = {
+  すべて: "ALL",
+  リング: "RING",
+  ネックレス: "NECKLACE",
+  ブレス: "BRACELET",
+  バンダナ: "BANDANA",
+  ビーズ: "BEADS",
+  紐: "CORD",
+  金具: "METAL",
+};
+
+function coverFor(product) {
+  if (product.image) return product.image;
+  if (product.category === "ネックレス") return "video/stills/02-style-a.jpg";
+  if (product.category === "ブレス") return "video/stills/01-necklace-b.jpg";
+  if (product.category === "バンダナ") return "video/stills/04-leather.jpg";
+  return "images/feather-ring.jpg";
+}
 
 const app = document.querySelector("#app");
 
@@ -39,77 +59,102 @@ function visibleProducts() {
   return state.products.filter((product) => category === "すべて" || product.category === category);
 }
 
+function go(nextMode) {
+  mode = nextMode;
+  category = "すべて";
+  navOpen = false;
+  render();
+  document.getElementById("item")?.scrollIntoView({ behavior: "smooth" });
+}
+
 function render() {
+  app.replaceChildren(...[
+    h("header", { class: "hz-bar" }, [
+      h("button", { class: "hz-logo", type: "button", onclick: () => { mode = "sets"; navOpen = false; window.scrollTo({ top: 0, behavior: "smooth" }); render(); } }, "Tsuii's"),
+      h("button", {
+        class: "hz-burger",
+        type: "button",
+        "aria-expanded": String(navOpen),
+        "aria-label": navOpen ? "メニューを閉じる" : "メニューを開く",
+        onclick: () => { navOpen = !navOpen; render(); },
+      }, [h("span"), h("span"), h("span")]),
+    ]),
+    navOpen ? h("nav", { class: "hz-nav", "aria-label": "メニュー" }, [
+      h("button", { type: "button", onclick: () => go("sets") }, "ITEM"),
+      h("button", { type: "button", onclick: () => go("custom") }, "ORDER"),
+      h("button", { type: "button", onclick: () => { navOpen = false; slipOpen = true; render(); } }, `MEMO${slip.length ? `  ${slip.length}` : ""}`),
+    ]) : null,
+    h("section", { class: "hz-hero", "aria-label": "Tsuii's" }, [
+      h("p", { class: "hz-kicker" }, "SILVER AND GOLD"),
+      h("h1", {}, "Tsuii's"),
+      h("a", { class: "hz-down", href: "#item" }, [h("span", { "aria-hidden": "true" }), h("span", { class: "hz-sr" }, "ITEM")]),
+    ]),
+    h("main", { id: "item", class: "hz-main" }, mode === "custom" ? orderMain() : itemMain()),
+    openId ? productSheet(state.products.find((product) => product.id === openId)) : null,
+    slipOpen ? slipSheet() : null,
+  ].filter(Boolean));
+}
+
+function itemMain() {
   const groups = new Map();
   for (const product of visibleProducts()) {
     if (!groups.has(product.category)) groups.set(product.category, []);
     groups.get(product.category).push(product);
   }
-
-  const sections = [...groups.entries()].map(([name, products]) =>
-    h("section", { class: "section" }, [
-      h("h3", {}, name),
-      ...products.map((product) => {
-        const price = displayPrice(state, product);
-        const meta = isQuoted(product)
-          ? product.note
-          : `${metalLabel(product.metal)}  ${product.weightG}g  ·  ${product.note}`;
-        return h("button", { class: "dish", onclick: () => openProduct(product.id) }, [
-          productMark(product),
-          h("span", {}, [
-            h("p", { class: "dish-name" }, product.name),
-            h("p", { class: "dish-meta" }, meta),
-          ]),
-          h("span", { class: "dish-price" }, [yen(price), h("small", {}, isQuoted(product) ? "見積" : "税込・オプション別")]),
-        ]);
-      }),
-    ]),
-  );
-
-  app.replaceChildren(
-    h("div", { class: "menu-shell" }, [
-      h("aside", { class: "menu-side" }, [
-        h("div", {}, [
-          h("p", { class: "wordmark" }, ["Tsuii", h("span", {}, "’s")]),
-          h("p", { class: "eyebrow" }, "MENU"),
-          h("span", { class: "draft-pill" }, "下書き"),
-        ]),
-        h("div", { class: "mode-switch" }, [
-          h("button", { type: "button", "aria-pressed": String(mode === "sets"), onclick: () => { mode = "sets"; category = "すべて"; render(); } }, "定番を見る"),
-          h("button", { type: "button", "aria-pressed": String(mode === "custom"), onclick: () => { mode = "custom"; category = "すべて"; render(); } }, "パーツで組む"),
-        ]),
-        mode === "sets" ? h("nav", { class: "cat-list", "aria-label": "カテゴリ" }, categories().map((item) =>
-          h("button", {
-            type: "button",
-            "aria-pressed": String(category === item),
-            onclick: () => { category = item; render(); },
-          }, item),
-        )) : null,
-        h("div", { class: "side-note" }, [
-          "定番はそのまま見られます。パーツで組むと、1点ずつの金額で組み合わせを変えられます。",
-          h("div", { class: "links" }, (state.links || []).map((link) =>
-            h("a", { href: link.href, target: "_blank", rel: "noreferrer" }, link.label),
-          )),
-          h("p", {}, h("a", { href: "dashboard.html" }, "スタッフ用ダッシュボード")),
-        ]),
+  let index = 0;
+  const blocks = [...groups.entries()].flatMap(([name, products]) => products.map((product) => {
+    const flip = index % 2 === 1;
+    index += 1;
+    const price = displayPrice(state, product);
+    return h("article", { class: `hz-split${flip ? " is-flip" : ""}` }, [
+      h("div", { class: "hz-photo" }, h("img", { src: coverFor(product), alt: "" })),
+      h("div", { class: "hz-copy" }, [
+        h("p", { class: "hz-en" }, englishName[name] || name),
+        h("h2", {}, product.name),
+        h("p", { class: "hz-ja" }, product.note || name),
+        h("p", { class: "hz-price" }, yen(price)),
+        h("button", { class: "hz-more", type: "button", onclick: () => openProduct(product.id) }, "READ MORE"),
       ]),
-      h("main", { class: "menu-main" }, [
-        h("header", { class: "menu-top" }, [
-          h("div", {}, [
-            h("h2", {}, mode === "custom" ? "パーツで組む" : "定番"),
-            h("p", {}, mode === "custom"
-              ? "ほしいパーツの数を変えると、合計が変わります。定番の内容からはじめることもできます。"
-              : "写真がある商品は写真です。まだない商品は図案です。開くと金額が出ます。"),
-          ]),
-          h("button", { class: "slip-launcher", type: "button", onclick: () => { slipOpen = true; render(); } }, `ご相談メモ ${slip.length}`),
-        ]),
-        mode === "custom" ? customSections() : (sections.length ? sections : h("p", { class: "empty" }, "このカテゴリの商品はまだありません。")),
-        mode === "custom" ? customBar() : null,
-      ]),
+    ]);
+  }));
+
+  return [
+    h("section", { class: "hz-intro" }, [
+      h("h2", {}, "INTRODUCTION"),
+      h("p", { class: "hz-ja" }, "はじめに"),
+      h("p", {}, "シルバーとゴールドのアクセサリーです。定番の一点を開くと内訳が出ます。パーツで組むと、数量を変えた合計が見られます。"),
+      h("p", { class: "hz-en" }, "Show this screen to the staff. It is not a checkout."),
     ]),
-    openId ? productSheet(state.products.find((product) => product.id === openId)) : null,
-    slipOpen ? slipSheet() : null,
-  );
+    h("section", { class: "hz-intro" }, [
+      h("h2", {}, "ITEM"),
+      h("p", { class: "hz-ja" }, "定番"),
+    ]),
+    ...blocks,
+    siteFoot(),
+  ];
+}
+
+function orderMain() {
+  return [
+    h("section", { class: "hz-intro" }, [
+      h("h2", {}, "MADE TO ORDER"),
+      h("p", { class: "hz-ja" }, "パーツで組む"),
+      h("p", {}, "ほしいパーツの数を変えると、合計が変わります。定番の内訳からも、この画面ではじめられます。"),
+    ]),
+    ...customSections(),
+    customBar(),
+    siteFoot(),
+  ];
+}
+
+function siteFoot() {
+  return h("footer", { class: "hz-foot" }, [
+    h("p", { class: "hz-en" }, "Tsuii's"),
+    h("div", { class: "hz-foot-links" }, [
+      ...(state.links || []).map((link) => h("a", { href: link.href, target: "_blank", rel: "noreferrer" }, link.label)),
+      h("a", { href: "dashboard.html" }, "STAFF"),
+    ]),
+  ]);
 }
 
 function productMark(product) {
@@ -221,14 +266,16 @@ function customGroups() {
 
 function customSections() {
   return customGroups().map((group) =>
-    h("section", { class: "section" }, [
-      h("h3", {}, group),
+    h("section", { class: "hz-order" }, [
+      h("h3", {}, [
+        h("span", { class: "hz-en" }, englishName[group] || group),
+        h("span", { class: "hz-ja" }, group),
+      ]),
       ...(state.library || []).filter((part) => part.group === group).map((part) =>
-        h("div", { class: "dish" }, [
-          h("span", { class: "mark silver", "aria-hidden": "true" }, motif(part.group === "金具" ? "gold" : "silver")),
-          h("span", {}, [
-            h("p", { class: "dish-name" }, part.name),
-            h("p", { class: "dish-meta" }, `${yen(part.unitYen)} / 1点${part.note ? `  ·  ${part.note}` : ""}`),
+        h("div", { class: "hz-part" }, [
+          h("div", {}, [
+            h("p", { class: "hz-part-name" }, part.name),
+            h("p", { class: "hz-ja" }, `${yen(part.unitYen)} / 1点${part.note ? `  ·  ${part.note}` : ""}`),
           ]),
           h("span", { class: "stepper" }, [
             h("button", { type: "button", onclick: () => changeQty(part.id, -1), "aria-label": `${part.name}を減らす` }, "−"),

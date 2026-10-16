@@ -399,8 +399,11 @@ async function fetchMarket() {
   if (status) status.textContent = "参照価格を取得しています…";
   try {
     const response = await fetch("/api/market");
+    const type = response.headers.get("content-type") || "";
+    if (!response.ok || !type.includes("json")) {
+      throw new Error("この住所では日次の参照価格は取れません。メニューの見積金額はそのまま使えます。");
+    }
     const quote = await response.json();
-    if (!response.ok) throw new Error(quote.error || "取得に失敗しました");
     state.market = {
       ...state.market,
       ...quote,
