@@ -2,7 +2,7 @@
   "brand": "Tsuii's",
   "owner": "Kaoru Mitsui",
   "orderEmail": "",
-  "logo": "images/Logo.jpg",
+  "logo": "images/logo-mark.png",
   "draft": true,
   "taxRate": 0.1,
   "rates": {
@@ -185,10 +185,6 @@
     }
   ],
   "looks": [
-    {
-      "name": "ロゴ",
-      "image": "images/Logo.jpg"
-    },
     {
       "name": "サンプル",
       "image": "images/Sample.jpg"

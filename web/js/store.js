@@ -102,6 +102,8 @@ export async function loadState() {
     try {
       const state = JSON.parse(saved);
       state.orderEmail = seed.orderEmail || "";
+      state.logo = seed.logo || "";
+      state.looks = seed.looks || [];
       return state;
     } catch {
       localStorage.removeItem(STORAGE_KEY);
