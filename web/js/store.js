@@ -1,4 +1,4 @@
-const STORAGE_KEY = "tsuiis-draft-v7";
+const STORAGE_KEY = "tsuiis-draft-v8";
 
 export function yen(value) {
   const amount = Math.round(Number(value) || 0);

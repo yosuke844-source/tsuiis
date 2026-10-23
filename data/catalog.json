@@ -168,20 +168,6 @@
           "qty": 1
         }
       ]
-    },
-    {
-      "id": "Q-BAN",
-      "name": "バンダナ コンチョ",
-      "category": "バンダナ",
-      "metal": "mixed",
-      "quoted": true,
-      "note": "コンチョ1個。",
-      "lines": [
-        {
-          "partId": "P22",
-          "qty": 1
-        }
-      ]
     }
   ],
   "looks": [
@@ -345,13 +331,6 @@
       "name": "革紐（ブレス）",
       "group": "紐",
       "unitYen": 500,
-      "note": ""
-    },
-    {
-      "id": "P22",
-      "name": "コンチョ",
-      "group": "金具",
-      "unitYen": 8500,
       "note": ""
     }
   ]

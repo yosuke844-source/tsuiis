@@ -410,7 +410,7 @@ function removeSlip(key) {
 loadState().then((loaded) => {
   state = loaded;
   window.addEventListener("storage", async (event) => {
-    if (event.key === "tsuiis-draft-v7") {
+    if (event.key === "tsuiis-draft-v8") {
       state = await loadState();
       render();
     }
