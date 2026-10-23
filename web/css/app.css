@@ -347,7 +347,7 @@ td input, td select { min-width: 88px; }
 
 @media (prefers-reduced-motion: reduce) {
   .menu-film { display: none; }
-  .hz-hero { background: url("../images/feather-ring.jpg") center/cover; }
+  .hz-hero { background: url("../images/Feather Ring.jpg") center/cover; }
 }
 
 .hz-bar {
@@ -371,6 +371,14 @@ td input, td select { min-width: 88px; }
   font-size: 18px;
   letter-spacing: 0.14em;
   min-height: 44px;
+  padding: 0;
+}
+.hz-logo img {
+  height: 44px;
+  width: 56px;
+  object-fit: cover;
+  object-position: center 10%;
+  display: block;
 }
 .hz-burger {
   width: 44px;
@@ -535,6 +543,18 @@ td input, td select { min-width: 88px; }
 .menu-body .option-row, .menu-body .slip-line { border-bottom-color: #2a2a2a; }
 .menu-body .option-row button { background: transparent; color: #fff; border-color: #555; border-radius: 0; }
 .menu-body .sheet, .menu-body .slip { z-index: 6; background: rgba(0, 0, 0, 0.62); }
+.menu-body .order-box { display: grid; gap: 10px; margin-top: 18px; }
+.menu-body .order-label { display: grid; gap: 6px; font-size: 13px; letter-spacing: 0.06em; }
+.menu-body .order-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: #101010;
+  color: #fff;
+  border: 1px solid #555;
+  min-height: 44px;
+  padding: 8px 12px;
+  font: inherit;
+}
 
 @media (max-width: 800px) {
   .hz-split, .hz-split.is-flip { grid-template-columns: 1fr; }

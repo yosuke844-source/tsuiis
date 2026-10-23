@@ -22,6 +22,10 @@ const englishName = {
   ネックレス: "NECKLACE",
   ブレス: "BRACELET",
   バンダナ: "BANDANA",
+  ロゴ: "LOGO",
+  サンプル: "SAMPLE",
+  バングル: "BANGLE",
+  コンチョリング: "CONCHO RING",
   ビーズ: "BEADS",
   紐: "CORD",
   金具: "METAL",
@@ -32,7 +36,7 @@ function coverFor(product) {
   if (product.category === "ネックレス") return "video/stills/02-style-a.jpg";
   if (product.category === "ブレス") return "video/stills/01-necklace-b.jpg";
   if (product.category === "バンダナ") return "video/stills/04-leather.jpg";
-  return "images/feather-ring.jpg";
+  return "images/Feather Ring.jpg";
 }
 
 const app = document.querySelector("#app");
@@ -70,7 +74,11 @@ function go(nextMode) {
 function render() {
   app.replaceChildren(...[
     h("header", { class: "hz-bar" }, [
-      h("button", { class: "hz-logo", type: "button", onclick: () => { mode = "sets"; navOpen = false; window.scrollTo({ top: 0, behavior: "smooth" }); render(); } }, "Tsuii's"),
+      h("button", { class: "hz-logo", type: "button", onclick: () => { mode = "sets"; navOpen = false; window.scrollTo({ top: 0, behavior: "smooth" }); render(); } }, [
+        state.logo
+          ? h("img", { src: state.logo, alt: "Tsuii's" })
+          : "Tsuii's",
+      ]),
       h("button", {
         class: "hz-burger",
         type: "button",
@@ -130,8 +138,25 @@ function itemMain() {
       h("p", { class: "hz-ja" }, "定番"),
     ]),
     ...blocks,
+    ...lookBlocks(index),
     siteFoot(),
   ];
+}
+
+function lookBlocks(start) {
+  let index = start;
+  return (state.looks || []).map((look) => {
+    const flip = index % 2 === 1;
+    index += 1;
+    return h("article", { class: `hz-split${flip ? " is-flip" : ""}` }, [
+      h("div", { class: "hz-photo" }, h("img", { src: look.image, alt: look.name })),
+      h("div", { class: "hz-copy" }, [
+        h("p", { class: "hz-en" }, englishName[look.name] || look.name),
+        h("h2", {}, look.name),
+        look.note ? h("p", { class: "hz-ja" }, look.note) : null,
+      ]),
+    ]);
+  });
 }
 
 function orderMain() {
@@ -385,7 +410,7 @@ function removeSlip(key) {
 loadState().then((loaded) => {
   state = loaded;
   window.addEventListener("storage", async (event) => {
-    if (event.key === "tsuiis-draft-v6") {
+    if (event.key === "tsuiis-draft-v7") {
       state = await loadState();
       render();
     }

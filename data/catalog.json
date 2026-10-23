@@ -1,6 +1,8 @@
 {
   "brand": "Tsuii's",
   "owner": "Kaoru Mitsui",
+  "orderEmail": "",
+  "logo": "images/Logo.jpg",
   "draft": true,
   "taxRate": 0.1,
   "rates": {
@@ -46,7 +48,7 @@
       "metal": "mixed",
       "quoted": true,
       "priceYen": 60000,
-      "image": "images/feather-ring.jpg",
+      "image": "images/Feather Ring.jpg",
       "note": "シルバーの羽根に、小さなゴールドの星。"
     },
     {
@@ -55,6 +57,7 @@
       "category": "ネックレス",
       "metal": "mixed",
       "quoted": true,
+      "image": "images/Feather neckless.jpg",
       "note": "星形ビーズ シルバーは70cm分128個。星型ビーズ ゴールドは3個。",
       "lines": [
         {
@@ -129,6 +132,7 @@
       "category": "ブレス",
       "metal": "mixed",
       "quoted": true,
+      "image": "images/Star and red glass beads bracelet.jpg",
       "note": "星ビーズ シルバー 29個。",
       "lines": [
         {
@@ -178,6 +182,24 @@
           "qty": 1
         }
       ]
+    }
+  ],
+  "looks": [
+    {
+      "name": "ロゴ",
+      "image": "images/Logo.jpg"
+    },
+    {
+      "name": "サンプル",
+      "image": "images/Sample.jpg"
+    },
+    {
+      "name": "バングル",
+      "image": "images/Bangle.jpg"
+    },
+    {
+      "name": "コンチョリング",
+      "image": "images/Concho Ring.jpg"
     }
   ],
   "quoteSource": "三井さんとの前回の会話。税の記載はないので、金額はそのまま。",

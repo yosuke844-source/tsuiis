@@ -1,4 +1,4 @@
-const STORAGE_KEY = "tsuiis-draft-v6";
+const STORAGE_KEY = "tsuiis-draft-v7";
 
 export function yen(value) {
   const amount = Math.round(Number(value) || 0);
@@ -94,17 +94,19 @@ export function catalogUrl() {
 }
 
 export async function loadState() {
+  const response = await fetch(catalogUrl());
+  if (!response.ok) throw new Error("catalog.json を読み込めませんでした");
+  const seed = await response.json();
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) {
     try {
-      return JSON.parse(saved);
+      const state = JSON.parse(saved);
+      state.orderEmail = seed.orderEmail || "";
+      return state;
     } catch {
       localStorage.removeItem(STORAGE_KEY);
     }
   }
-  const response = await fetch(catalogUrl());
-  if (!response.ok) throw new Error("catalog.json を読み込めませんでした");
-  const seed = await response.json();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
   return seed;
 }
