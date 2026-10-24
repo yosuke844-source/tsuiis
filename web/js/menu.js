@@ -18,6 +18,8 @@ let navOpen = false;
 let orderName = "";
 let orderPhone = "";
 let orderInstagram = "";
+let otherName = "";
+let otherPrice = "";
 let orderStatus = "";
 let orderSending = false;
 
@@ -171,6 +173,7 @@ function orderMain() {
       h("p", {}, "ほしいパーツの数を変えると、合計が変わります。定番の内訳からも、この画面ではじめられます。"),
     ]),
     ...customSections(),
+    otherLine(),
     customBar(),
     siteFoot(),
   ];
@@ -317,17 +320,67 @@ function customSections() {
   );
 }
 
+function otherAmount() {
+  const amount = Math.round(Number(String(otherPrice).replace(/,/g, "")) || 0);
+  return amount > 0 ? amount : 0;
+}
+
+function otherReady() {
+  return Boolean(otherName.trim() || otherAmount());
+}
+
+function refreshCustomTotal() {
+  const bar = document.querySelector(".custom-bar");
+  if (!bar) return;
+  const fine = bar.querySelector(".fine");
+  const strong = bar.querySelector("strong");
+  if (fine) fine.textContent = `${customCount()}点`;
+  if (strong) strong.textContent = yen(customTotal());
+}
+
+function otherLine() {
+  return h("section", { class: "hz-order" }, [
+    h("h3", {}, [
+      h("span", { class: "hz-en" }, "OTHER"),
+      h("span", { class: "hz-ja" }, "その他"),
+    ]),
+    h("div", { class: "hz-other" }, [
+      h("input", {
+        class: "order-input",
+        type: "text",
+        placeholder: "名前",
+        value: otherName,
+        oninput: (event) => { otherName = event.target.value; refreshCustomTotal(); },
+      }),
+      h("input", {
+        class: "order-input",
+        type: "text",
+        inputmode: "numeric",
+        placeholder: "金額",
+        value: otherPrice,
+        oninput: (event) => { otherPrice = event.target.value; refreshCustomTotal(); },
+      }),
+    ]),
+  ]);
+}
+
 function changeQty(id, delta) {
   customQty[id] = Math.max(0, (customQty[id] || 0) + delta);
   render();
 }
 
+function customCount() {
+  const parts = Object.values(customQty).reduce((sum, qty) => sum + qty, 0);
+  return parts + (otherReady() ? 1 : 0);
+}
+
 function customTotal() {
-  return (state.library || []).reduce((sum, part) => sum + (customQty[part.id] || 0) * part.unitYen, 0);
+  const parts = (state.library || []).reduce((sum, part) => sum + (customQty[part.id] || 0) * part.unitYen, 0);
+  return parts + (otherReady() ? otherAmount() : 0);
 }
 
 function customBar() {
-  const count = Object.values(customQty).reduce((sum, qty) => sum + qty, 0);
+  const count = customCount();
   return h("div", { class: "custom-bar" }, [
     h("div", {}, [h("p", { class: "fine" }, `${count}点`), h("strong", {}, yen(customTotal()))]),
     h("button", { type: "button", onclick: addCustomSlip }, "この組み合わせをメモ"),
@@ -457,13 +510,17 @@ async function submitOrder(order, options = {}) {
 
 function addCustomSlip() {
   const picks = (state.library || []).filter((part) => customQty[part.id] > 0);
-  if (!picks.length) return;
+  if (!picks.length && !otherReady()) return;
+  const details = picks.map((part) => `${part.name} × ${customQty[part.id]}`);
+  if (otherReady()) details.push(`${otherName.trim() || "その他"} ${yen(otherAmount())}`);
   slip.push({
     key: `custom-${Date.now()}`,
     name: "カスタム",
-    detail: picks.map((part) => `${part.name} × ${customQty[part.id]}`).join("、"),
+    detail: details.join("、"),
     price: customTotal(),
   });
+  otherName = "";
+  otherPrice = "";
   slipOpen = true;
   render();
 }

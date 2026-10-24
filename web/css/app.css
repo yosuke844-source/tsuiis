@@ -524,6 +524,11 @@ td input, td select { min-width: 88px; }
 }
 .hz-more:hover { background: #ff851a; }
 .hz-order { max-width: 860px; margin: 0 auto 36px; }
+.hz-other {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  gap: 12px;
+}
 .hz-order h3 { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
 .hz-part {
   display: flex;
