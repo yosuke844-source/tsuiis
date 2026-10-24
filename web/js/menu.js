@@ -120,7 +120,7 @@ function itemMain() {
         h("p", { class: "hz-en" }, englishName[name] || name),
         h("h2", {}, product.name),
         h("p", { class: "hz-ja" }, product.note || name),
-        h("p", { class: "hz-price" }, yen(price)),
+        ["Q-RNG", "Q-NEC", "Q-BRC"].includes(product.id) ? null : h("p", { class: "hz-price" }, yen(price)),
         h("button", { class: "hz-more", type: "button", onclick: () => openProduct(product.id) }, "READ MORE"),
       ]),
     ]);

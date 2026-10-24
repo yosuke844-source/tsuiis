@@ -46,19 +46,18 @@ a { color: inherit; }
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  animation: film-fade 36s infinite both;
+  animation: film-fade 30s infinite both;
 }
 .menu-film img:nth-child(1) { animation-delay: -1.2s; }
 .menu-film img:nth-child(2) { animation-delay: 6s; }
 .menu-film img:nth-child(3) { animation-delay: 12s; }
 .menu-film img:nth-child(4) { animation-delay: 18s; }
 .menu-film img:nth-child(5) { animation-delay: 24s; }
-.menu-film img:nth-child(6) { animation-delay: 30s; }
 @keyframes film-fade {
   0% { opacity: 0; }
-  3% { opacity: 1; }
-  16.6% { opacity: 1; }
-  19.6% { opacity: 0; }
+  4% { opacity: 1; }
+  20% { opacity: 1; }
+  24% { opacity: 0; }
   100% { opacity: 0; }
 }
 
