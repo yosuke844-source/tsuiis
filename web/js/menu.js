@@ -1,4 +1,6 @@
-import { displayPrice, h, isQuoted, loadState, metalLabel, optionExTax, partLine, quotedLines, withTax, yen } from "./store.js";
+import { displayPrice, h, isQuoted, loadState, metalLabel, optionExTax, partLine, quotedLines, withTax, yen } from "./store.js?v=20261025d";
+
+const ORDER_EMAIL = "yaoyorozu@i.softbank.jp";
 
 function categories() {
   const names = [];
@@ -467,7 +469,7 @@ async function submitOrder(order, options = {}) {
     render();
     return;
   }
-  const email = String(state.orderEmail || "").trim();
+  const email = String(state.orderEmail || ORDER_EMAIL).trim();
   if (!email) {
     orderStatus = "送信先のメールアドレスがまだ入っていません。";
     render();
@@ -494,8 +496,15 @@ async function submitOrder(order, options = {}) {
       }),
     });
     const result = await response.json().catch(() => ({}));
+    const message = String(result.message || "");
+    if (/activat/i.test(message)) {
+      orderStatus = `${email} に確認メールを送りました。そのメールを開くと、このあと注文が届きます。`;
+      orderSending = false;
+      render();
+      return;
+    }
     if (!response.ok || result.success === false || result.success === "false") {
-      throw new Error(result.message || "送信できませんでした");
+      throw new Error(message || "送信できませんでした");
     }
     orderStatus = "注文を送りました。";
     orderName = "";

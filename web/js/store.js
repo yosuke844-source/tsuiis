@@ -94,14 +94,14 @@ export function catalogUrl() {
 }
 
 export async function loadState() {
-  const response = await fetch(catalogUrl());
+  const response = await fetch(`${catalogUrl()}?v=20261025d`, { cache: "no-store" });
   if (!response.ok) throw new Error("catalog.json を読み込めませんでした");
   const seed = await response.json();
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) {
     try {
       const state = JSON.parse(saved);
-      state.orderEmail = seed.orderEmail || "";
+      state.orderEmail = seed.orderEmail || "yaoyorozu@i.softbank.jp";
       state.logo = seed.logo || "";
       state.looks = seed.looks || [];
       return state;
