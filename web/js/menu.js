@@ -149,7 +149,7 @@ function itemMain() {
 
 function lookBlocks(start) {
   let index = start;
-  return (state.looks || []).map((look) => {
+  return (state.looks || []).filter((look) => look.name !== "サンプル").map((look) => {
     const flip = index % 2 === 1;
     index += 1;
     return h("article", { class: `hz-split${flip ? " is-flip" : ""}` }, [
@@ -536,7 +536,7 @@ function removeSlip(key) {
 loadState().then((loaded) => {
   state = loaded;
   window.addEventListener("storage", async (event) => {
-    if (event.key === "tsuiis-draft-v8") {
+    if (event.key === "tsuiis-draft-v9") {
       state = await loadState();
       render();
     }
