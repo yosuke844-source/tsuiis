@@ -15,6 +15,11 @@ let category = "すべて";
 let openId = null;
 let slipOpen = false;
 let navOpen = false;
+let orderName = "";
+let orderPhone = "";
+let orderInstagram = "";
+let orderStatus = "";
+let orderSending = false;
 
 const englishName = {
   すべて: "ALL",
@@ -22,7 +27,6 @@ const englishName = {
   ネックレス: "NECKLACE",
   ブレス: "BRACELET",
   バンダナ: "BANDANA",
-  ロゴ: "LOGO",
   サンプル: "SAMPLE",
   バングル: "BANGLE",
   コンチョリング: "CONCHO RING",
@@ -219,12 +223,12 @@ function quotedSheet(product) {
       )),
       h("div", { class: "total" }, [h("span", {}, "見積"), h("span", {}, yen(total))]),
       h("div", { class: "actions" }, [
-        h("button", { class: "primary", type: "button", onclick: () => addSlip(product) }, "この定番をメモする"),
+        h("button", { class: "ghost", type: "button", onclick: () => addSlip(product) }, "この定番をメモする"),
         (product.lines && product.lines.length)
           ? h("button", { class: "ghost", type: "button", onclick: () => startFromSet(product) }, "この内容からはじめて調整")
           : null,
       ]),
-      h("p", { class: "fine" }, "注文や会計ではありません。この画面をスタッフに見せてください。"),
+      orderBox(orderFromProduct(product)),
     ]),
   ]);
 }
@@ -338,6 +342,119 @@ function startFromSet(product) {
   render();
 }
 
+function orderFromProduct(product) {
+  const parts = quotedLines(state, product);
+  const rows = parts.length
+    ? parts.map((part) => `${part.name}　${part.qty} × ${yen(part.unitYen)}　${yen(partLine(part))}`)
+    : [product.note || ""];
+  return {
+    title: product.name,
+    text: [product.name, ...rows.filter(Boolean)].join("\n"),
+    total: displayPrice(state, product),
+  };
+}
+
+function orderFromSlip(lines) {
+  return {
+    title: "ご相談メモ",
+    text: lines.map(({ line, names, price }) => `${line.name}　${names.filter(Boolean).join("、")}　${yen(price)}`).join("\n"),
+    total: lines.reduce((sum, line) => sum + line.price, 0),
+  };
+}
+
+function orderField(label, options) {
+  return h("label", { class: "order-label" }, [
+    label,
+    h("input", { class: "order-input", ...options }),
+  ]);
+}
+
+function orderBox(order) {
+  return h("div", { class: "order-box" }, [
+    orderField("お名前", {
+      type: "text",
+      autocomplete: "name",
+      value: orderName,
+      oninput: (event) => { orderName = event.target.value; },
+    }),
+    orderField("電話番号", {
+      type: "tel",
+      autocomplete: "tel",
+      placeholder: "Instagramがない方はこちら",
+      value: orderPhone,
+      oninput: (event) => { orderPhone = event.target.value; },
+    }),
+    orderField("Instagram（お持ちの方）", {
+      type: "text",
+      placeholder: "@name",
+      value: orderInstagram,
+      oninput: (event) => { orderInstagram = event.target.value; },
+    }),
+    h("button", {
+      class: "primary",
+      type: "button",
+      disabled: orderSending ? "" : null,
+      onclick: () => submitOrder(order),
+    }, orderSending ? "送信しています…" : "注文する"),
+    h("p", { class: "fine" }, orderStatus || "電話番号かInstagramのどちらかで送れます。お会計はこの画面では済みません。"),
+  ]);
+}
+
+async function submitOrder(order, options = {}) {
+  const name = orderName.trim();
+  const phone = orderPhone.trim();
+  const handle = orderInstagram.trim();
+  if (!order.text) {
+    orderStatus = "メモが空です。";
+    render();
+    return;
+  }
+  if (options.requireContact !== false && !phone && !handle) {
+    orderStatus = "電話番号かInstagramを入力してください。";
+    render();
+    return;
+  }
+  const email = String(state.orderEmail || "").trim();
+  if (!email) {
+    orderStatus = "送信先のメールアドレスがまだ入っていません。";
+    render();
+    return;
+  }
+  const who = [name, phone, handle].filter(Boolean).join(" ");
+  orderSending = true;
+  orderStatus = "送信しています…";
+  render();
+  try {
+    const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(email)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        name: who || "ご相談メモ",
+        お名前: name,
+        電話番号: phone,
+        Instagram: handle,
+        内容: order.text,
+        合計: yen(order.total),
+        _subject: `Tsuii's 注文 ${order.title}${who ? ` ${who}` : ""}`,
+        _captcha: "false",
+        _template: "box",
+      }),
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.success === false || result.success === "false") {
+      throw new Error(result.message || "送信できませんでした");
+    }
+    orderStatus = "注文を送りました。";
+    orderName = "";
+    orderPhone = "";
+    orderInstagram = "";
+  } catch (error) {
+    orderStatus = `送れませんでした。${error.message}`;
+  }
+  orderSending = false;
+  render();
+}
+
 function addCustomSlip() {
   const picks = (state.library || []).filter((part) => customQty[part.id] > 0);
   if (!picks.length) return;
@@ -368,8 +485,9 @@ function slipSheet() {
     if (!line.productId) return { line, names: line.detail ? [line.detail] : [], price: line.price };
     const product = state.products.find((item) => item.id === line.productId);
     if (!product) return null;
+    const quoted = quotedLines(state, product).map((part) => `${part.name} × ${part.qty}`);
     const names = isQuoted(product)
-      ? ["定番"]
+      ? (quoted.length ? quoted : [product.note || "定番"])
       : (product.options || []).filter((option) => line.optionIds.includes(option.id)).map((option) => option.name);
     const price = displayPrice(state, product, line.optionIds);
     return { line, names, price };
@@ -395,8 +513,16 @@ function slipSheet() {
         ]),
       ) : h("p", { class: "empty" }, "まだ何も入っていません。"),
       h("div", { class: "total" }, [h("span", {}, "合計"), h("span", {}, yen(total))]),
-      h("button", { class: "ghost", type: "button", onclick: () => { slip.length = 0; render(); } }, "メモを空にする"),
-      h("p", { class: "fine" }, "iPad をスタッフに渡すための控えです。決済はしません。"),
+      h("div", { class: "slip-actions" }, [
+        h("button", { class: "ghost", type: "button", onclick: () => { slip.length = 0; orderStatus = ""; render(); } }, "メモを空にする"),
+        h("button", {
+          class: "primary",
+          type: "button",
+          disabled: orderSending ? "" : null,
+          onclick: () => submitOrder(orderFromSlip(lines), { requireContact: false }),
+        }, orderSending ? "送信しています…" : "注文する"),
+      ]),
+      h("p", { class: "fine" }, orderStatus || "注文すると、この内容がメールで届きます。お会計はこの画面では済みません。"),
     ]),
   ]);
 }

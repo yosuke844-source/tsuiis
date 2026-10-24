@@ -563,6 +563,13 @@ td input, td select { min-width: 88px; }
 .menu-body .ghost { background: transparent; color: #fff; border: 1px solid #555; border-radius: 0; }
 .menu-body .option-row, .menu-body .slip-line { border-bottom-color: #2a2a2a; }
 .menu-body .option-row button { background: transparent; color: #fff; border-color: #555; border-radius: 0; }
+.menu-body .slip-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
 .menu-body .sheet, .menu-body .slip { z-index: 6; background: rgba(0, 0, 0, 0.62); }
 .menu-body .order-box { display: grid; gap: 10px; margin-top: 18px; }
 .menu-body .order-label { display: grid; gap: 6px; font-size: 13px; letter-spacing: 0.06em; }
